@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>YBVC • Grades Pro</title><script src="https://cdn.tailwindcss.com"></script><style>.glass{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02));backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08)}</style></head>
+<body class="bg-[#060815] text-white flex min-h-screen">
+<aside class="w-[300px] bg-[#0a0d1f]/80 backdrop-blur-xl border-r border-white/[0.06] p-7 flex flex-col fixed h-screen">
+<div class="flex items-center gap-3.5"><img src="img/yllanna logo.png" class="w-[56px] h-[56px] rounded-2xl bg-white p-1 object-cover"><div><h2 class="font-black text-[17px]">YBVC</h2><p class="text-[10px] text-white/40">College of Computer</p></div></div>
+<nav class="space-y-2 mt-12">
+<a href="index.html" class="flex gap-3 text-white/50 px-4 py-3.5 rounded-2xl hover:bg-white/[0.06]">📊 Dashboard</a>
+<a href="students.html" class="flex gap-3 text-white/50 px-4 py-3.5 rounded-2xl hover:bg-white/[0.06]">👥 Students</a>
+<a href="grades.html" class="flex gap-3 bg-gradient-to-r from-[#2a5bda] to-[#3b6ef5] text-white px-4 py-3.5 rounded-2xl font-bold shadow-lg">📝 Grades</a>
+<a href="reports.html" class="flex gap-3 text-white/50 px-4 py-3.5 rounded-2xl hover:bg-white/[0.06]">📄 Reports</a>
+<a href="settings.html" class="flex gap-3 text-white/50 px-4 py-3.5 rounded-2xl hover:bg-white/[0.06]">⚙️ Settings</a>
+</nav>
+<div class="mt-auto glass p-4 rounded-[20px] flex items-center gap-3 border-yellow-400/20">
+<img src="img/admin.jpg" onerror="this.src='img/yllanna logo.png'" alt="Mohammad Salip" class="w-11 h-11 rounded-2xl object-cover border-2 border-yellow-400/50">
+<div><p class="text-[13px] font-bold">Mohammad Salip</p><p class="text-[10px] text-white/40">Super Admin • Online</p></div>
+<div class="ml-auto w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+</div>
+</aside>
+<main class="flex-1 ml-[300px] p-10"><h1 class="text-[34px] font-black">Grades Entry</h1><p class="text-white/40 text-[13px] mt-1">Auto-compute final grade • DepEd Standard</p>
+<div class="glass rounded-[28px] p-8 mt-8">
+<div class="grid grid-cols-4 gap-5">
+<div class="glass p-5 rounded-2xl"><label class="text-[10px] text-white/40 font-bold tracking-widest">1ST QUARTER • 20%</label><input id="q1Input" type="number" placeholder="0" class="w-full bg-transparent text-[32px] font-black mt-2 outline-none"></div>
+<div class="glass p-5 rounded-2xl"><label class="text-[10px] text-white/40 font-bold tracking-widest">2ND QUARTER • 20%</label><input id="q2Input" type="number" placeholder="0" class="w-full bg-transparent text-[32px] font-black mt-2 outline-none"></div>
+<div class="glass p-5 rounded-2xl"><label class="text-[10px] text-white/40 font-bold tracking-widest">3RD QUARTER • 60%</label><input id="q3Input" type="number" placeholder="0" class="w-full bg-transparent text-[32px] font-black mt-2 outline-none"></div>
+<div class="glass p-5 rounded-2xl border-yellow-400/30 bg-yellow-400/[0.03]"><label class="text-[10px] text-yellow-400 font-bold tracking-widest">FINAL • AUTO</label><p id="finalDisplay" class="text-[42px] font-black mt-2 text-white/20">—</p></div>
+</div>
+<div class="flex gap-3 mt-8">
+<button id="saveBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 px-8 py-4 rounded-2xl font-bold shadow-lg">Save & Compute</button>
+<button id="resetBtn" class="glass px-8 py-4 rounded-2xl font-bold">Reset</button>
+</div>
+</div>
+</main>
+
+<script>
+function computeGrade(){
+  const v1 = parseFloat(document.getElementById('q1Input').value)||0;
+  const v2 = parseFloat(document.getElementById('q2Input').value)||0;
+  const v3 = parseFloat(document.getElementById('q3Input').value)||0;
+  const el = document.getElementById('finalDisplay');
+  if(v1==0 && v2==0 && v3==0){ el.textContent='—'; el.className='text-[42px] font-black mt-2 text-white/20'; return; }
+  const final = Math.round(v1*0.2 + v2*0.2 + v3*0.6);
+  if(final>=75) el.innerHTML = final+' <span class="text-[11px] bg-green-500/20 text-green-400 px-3 py-1 rounded-full">PASSED</span>';
+  else if(final>=60) el.innerHTML = final+' <span class="text-[11px] bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full">REMEDIAL</span>';
+  else el.innerHTML = final+' <span class="text-[11px] bg-red-500/20 text-red-400 px-3 py-1 rounded-full">FAILED</span>';
+  el.className='text-[42px] font-black mt-2 '+(final>=75?'text-green-400':final>=60?'text-yellow-400':'text-red-400');
+}
+document.getElementById('q1Input').addEventListener('input', computeGrade);
+document.getElementById('q2Input').addEventListener('input', computeGrade);
+document.getElementById('q3Input').addEventListener('input', computeGrade);
+
+document.getElementById('saveBtn').addEventListener('click', ()=>{
+  const txt = document.getElementById('finalDisplay').textContent;
+  if(txt.includes('—')){ alert('Butangi ug grade boss!'); return; }
+  const btn = document.getElementById('saveBtn');
+  btn.textContent='✓ Saved!'; btn.className='bg-white text-black px-8 py-4 rounded-2xl font-bold';
+  setTimeout(()=>{ btn.textContent='Save & Compute'; btn.className='bg-gradient-to-r from-green-500 to-emerald-600 px-8 py-4 rounded-2xl font-bold shadow-lg'; },1500);
+});
+
+document.getElementById('resetBtn').addEventListener('click', (e)=>{
+  e.preventDefault();
+  document.getElementById('q1Input').value='';
+  document.getElementById('q2Input').value='';
+  document.getElementById('q3Input').value='';
+  computeGrade();
+  if(navigator.vibrate) navigator.vibrate(50);
+});
+computeGrade();
+</script>
+<style>
+@media(max-width:768px){ aside{display:none !important} main{margin-left:0 !important; padding:20px !important} .grid-cols-4{grid-template-columns:1fr 1fr !important} }
+button{ touch-action:manipulation; cursor:pointer; min-height:48px; }
+input{ touch-action:manipulation; }
+</style>
+</body></html>
